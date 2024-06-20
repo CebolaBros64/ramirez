@@ -26,7 +26,8 @@ if __name__ == '__main__':
         def _selection(sender, app_data, user_data):
             print(f"User selected ${sender}")
             # dpg.set_value('originalMessage', msbt.TXT2.messages[int(sender.split('_')[1])])
-            dpg.set_value('originalMessage', repr(msbt.TXT2.messages[int(sender.split('_')[1])])[1:-1])
+            # dpg.set_value('originalMessage', repr(msbt.TXT2.messages[int(sender.split('_')[1])])[1:-1])
+            dpg.set_value('originalMessage', msbt.TXT2.messages[int(sender.split('_')[1])].replace('\x00', '\\x00'))
 
             for _item in user_data:
                 if _item != sender:
@@ -40,9 +41,10 @@ if __name__ == '__main__':
         for item in items:
             dpg.configure_item(item, callback=_selection, user_data=items)
     
-    with dpg.window(label="Original Message", min_size=(500, 200), max_size=(500, 200), pos=(250, 20), no_close=True):
+    with dpg.window(label="Original Message", min_size=(500, 200), max_size=(500, 200), pos=(250, 20), no_close=True, horizontal_scrollbar=True):
         #dpg.add_input_text(tag='originalMessage', enabled=False, width=500, height=200)
-        dpg.add_text(tag='originalMessage', wrap=485)
+        # dpg.add_text(tag='originalMessage', wrap=485)
+        dpg.add_text(tag='originalMessage')
 
     dpg.setup_dearpygui()
     dpg.show_viewport()
