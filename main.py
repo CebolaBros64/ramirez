@@ -5,12 +5,16 @@ from LMS.Stream.Reader import Reader
 if __name__ == '__main__':
     # Create the MSBT object
     msbt = MSBT()
-
-    with open('msbt/agb.msbt', 'rb+') as message:
-        # Create the reader object 
-        reader = Reader(message.read())
-        # Read the MSBT
-        msbt.read(reader)
+    msbp = MSBP()
+    
+    with open('msbt/pajama.msbp', 'rb+') as msbp_f:
+        reader1 = Reader(msbp_f.read())
+        msbp.read(reader1)
+        with open('msbt/agb.msbt', 'rb+') as message:
+            # Create the reader object 
+            reader = Reader(message.read())
+            # Read the MSBT
+            msbt.read(reader, msbp)
         
     dpg.create_context()
     dpg.create_viewport(title="Ramirez", width=1000, height=500)
@@ -21,7 +25,7 @@ if __name__ == '__main__':
     with dpg.window(label="Entries", min_size=(225, 400), max_size=(225, 400), pos=(10, 20), no_close=True):
         def _selection(sender, app_data, user_data):
             print(f"User selected ${sender}")
-            # print(msbt.TXT2.messages[int(sender.split('_')[1])])
+            # dpg.set_value('originalMessage', msbt.TXT2.messages[int(sender.split('_')[1])])
             dpg.set_value('originalMessage', repr(msbt.TXT2.messages[int(sender.split('_')[1])])[1:-1])
 
             for _item in user_data:
